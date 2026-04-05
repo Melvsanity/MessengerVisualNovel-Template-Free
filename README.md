@@ -23,6 +23,14 @@ It powers messenger-style storytelling with branching dialogue, CG unlocks, and 
 
 ---
 
+## Quick Start
+
+Open the project in Unity, create a `ConversationAsset`, write a `.bub` dialogue file, add it to the `CharacterDatabase`, and press Play.
+
+→ [Full Quick Start Guide](Docs/QuickStart.md)
+
+---
+
 ## What's Included
 
 ### BubbleSpinner — Dialogue Engine
@@ -54,14 +62,6 @@ The full phone simulation built on top of BubbleSpinner.
 03_PhoneScreen   → Home screen and app launcher
 04_ChatApp       → Chat interface
 ```
-
----
-
-## Quick Start
-
-Create a `ConversationAsset`, write a `.bub` dialogue file, add it to the `CharacterDatabase`, and press Play.
-
-→ [Full Quick Start Guide](Docs/QuickStart.md)
 
 ---
 

@@ -7,9 +7,13 @@ Follow these steps to add a new character and test them in Play Mode.
 
 ## Before You Start
 
-CG images use Addressables. If you haven't set that up yet, do that first:
-→ [Addressables Setup Guide](Addressable_Setup.md)
+```markdown
+CG images use Addressables. You need this set up before images will appear in chat.
 
+| Addressables not set up yet                           | → [Addressables Setup Guide](Addressable_Setup.md)    |
+| Addressables already set up, adding a new character   | → [Adding CGs for a New Character](Adding_CG.md)      |
+| Addressables ready, just need .bub syntax             | → [How to Use Images in .bub Files](Adding_Images.md) |
+```
 ---
 
 ## Step 1 — Create a Conversation Asset

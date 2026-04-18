@@ -130,15 +130,13 @@ namespace BubbleSpinner.Core
 
                     if (pendingDisplayMessages.Count > 0)
                     {
-                        // UI was mid-animation when player left — re-fire the same
-                        // batch. State has not advanced, so nothing is lost.
+                        // Re-fire the same batch of messages that were pending at the time of interruption.
                         BSDebug.Info($"[DialogueExecutor] Re-firing {pendingDisplayMessages.Count} pending messages after interrupt");
                         OnMessagesReady?.Invoke(new List<MessageData>(pendingDisplayMessages));
                     }
                     else
                     {
-                        // No pending batch — executor was at a clean pause boundary.
-                        // Restore the pause so the player can tap continue normally.
+                        // No pending messages to re-fire — just continue processing as normal.
                         if (currentNode.ShouldPauseAfter(state.currentMessageIndex))
                         {
                             var pausePoint = currentNode.GetPauseAt(state.currentMessageIndex);
@@ -151,7 +149,7 @@ namespace BubbleSpinner.Core
                             }
                         }
 
-                        DetermineNextActionSkipPause();
+                        ProcessCurrentNode();
                     }
                     break;
 
@@ -470,26 +468,44 @@ namespace BubbleSpinner.Core
             OnConversationEnd?.Invoke();
         }
 
-        private void DetermineNextActionSkipPause()
-        {
-            var choiceBlock = GetPendingChoiceBlockAtCurrentIndex();
-            if (choiceBlock != null)
-            {
-                state.resumeTarget = ResumeTarget.Choices;
-                OnChoicesReady?.Invoke(choiceBlock.choices);
-                return;
-            }
+        // DEAD CODE (likely)
+        //
+        // DetermineNextActionSkipPause is a reduced version of DetermineNextAction()
+        // that skips pause handling and only resolves choices, jumps, or end.
+        //
+        // This was originally introduced to handle interruption cases where the UI
+        // exited mid-message and we wanted to avoid re-triggering pause logic on resume.
+        //
+        // With the current pending message buffer system, interruptions are handled
+        // by re-firing pending messages and resuming the normal execution flow via
+        // ProcessCurrentNode(), making this separate "skip pause" path unnecessary.
+        //
+        // Keeping this method can cause incorrect behavior, such as:
+        // - Resuming mid-message and immediately resolving to End
+        // - Skipping remaining messages or pauses unintentionally
+        //
+        // If no other call sites require bypassing pause logic explicitly,
+        // this method can be safely removed.
+        // private void DetermineNextActionSkipPause()
+        // {
+        //     var choiceBlock = GetPendingChoiceBlockAtCurrentIndex();
+        //     if (choiceBlock != null)
+        //     {
+        //         state.resumeTarget = ResumeTarget.Choices;
+        //         OnChoicesReady?.Invoke(choiceBlock.choices);
+        //         return;
+        //     }
 
-            if (currentNode.jump != null && currentNode.jump.IsValid)
-            {
-                state.resumeTarget = ResumeTarget.None;
-                ExecuteJump(currentNode.jump);
-                return;
-            }
+        //     if (currentNode.jump != null && currentNode.jump.IsValid)
+        //     {
+        //         state.resumeTarget = ResumeTarget.None;
+        //         ExecuteJump(currentNode.jump);
+        //         return;
+        //     }
 
-            state.resumeTarget = ResumeTarget.End;
-            OnConversationEnd?.Invoke();
-        }
+        //     state.resumeTarget = ResumeTarget.End;
+        //     OnConversationEnd?.Invoke();
+        // }
 
         // ═══════════════════════════════════════════════════════════
         // NODE NAVIGATION

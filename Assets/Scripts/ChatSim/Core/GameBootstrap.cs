@@ -89,6 +89,7 @@ namespace ChatSim.Core
             _log.Info("=== BOOTSTRAP INITIALIZATION START ===");
 
             // ✅ optional: set target frame rate for consistent performance during development
+
             // Application.targetFrameRate = 60;
 
             try
@@ -100,6 +101,7 @@ namespace ChatSim.Core
                 _isInitialized = true;
 
                 // ✅ temporary FPS display for debugging performance during development
+
                 // if (SimpleFPS.Instance == null)
                 // {
                 //     var go = new GameObject("FPS_Debug");

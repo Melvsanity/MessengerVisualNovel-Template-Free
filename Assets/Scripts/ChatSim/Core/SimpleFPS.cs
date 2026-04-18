@@ -1,13 +1,15 @@
 using UnityEngine;
+using ChatSim.Core;
 
 public class SimpleFPS : MonoBehaviour
 {
     public static SimpleFPS Instance;
 
-    float deltaTime;
-    bool show = true;
+    private float _deltaTime;
+    private bool _show;
+    private GUIStyle _style;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -17,32 +19,38 @@ public class SimpleFPS : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        _style = new GUIStyle();
     }
 
-    void Update()
+    private void Start()
     {
-        // Toggle (optional)
+        // Read initial state from GameConfig
+        _show = true;
+    }
+
+    private void Update()
+    {
         if (Input.GetKeyDown(KeyCode.F3))
-            show = !show;
+            _show = !_show;
 
-        deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        _deltaTime += (Time.unscaledDeltaTime - _deltaTime) * 0.1f;
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
-        if (!show) return;
+        if (!_show) return;
 
-        int h = Screen.height;
+        _style.fontSize = Screen.height * 2 / 50;
+        _style.normal.textColor = Color.yellow;
 
-        GUIStyle style = new GUIStyle();
-        style.fontSize = h * 2 / 50;
-        style.normal.textColor = Color.white;
+        float ms = _deltaTime * 1000.0f;
+        float fps = 1.0f / _deltaTime;
 
-        float ms = deltaTime * 1000.0f;
-        float fps = 1.0f / deltaTime;
-
-        GUI.Label(new Rect(10, 10, 300, 40),
-            $"FPS: {Mathf.Ceil(fps)} | {ms:0.0} ms",
-            style);
+        GUI.Label(
+            new Rect(10, 10, 300, 40),
+            $"FPS: {Mathf.Ceil(fps)} ({ms:0.0} ms)",
+            _style
+        );
     }
 }

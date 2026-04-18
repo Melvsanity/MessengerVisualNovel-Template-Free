@@ -146,6 +146,7 @@ namespace ChatSim.Core
         {
             Debug.Log("[BubbleSpinnerBridge] All stories reset — invalidating cache");
             _cachedSaveData = null;
+            _conversationManager?.EvictAllConversationCaches();
         }
 
         public void Cleanup()

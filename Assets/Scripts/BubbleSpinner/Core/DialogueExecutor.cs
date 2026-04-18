@@ -67,7 +67,9 @@ namespace BubbleSpinner.Core
         public string CurrentNodeName => state?.currentNodeName ?? "";
         public int CurrentMessageIndex => state?.currentMessageIndex ?? 0;
         public ConversationState GetState() => state;
-        public bool HasMoreChapters => false;
+
+        // DEAD CODE — no caller found in provided scripts; original implementation used a "Continue to Next Chapter" button that was removed in favor of <<jump>> tags in .bub files
+        // public bool HasMoreChapters => false;
 
         // ═══════════════════════════════════════════════════════════
         // INITIALIZATION
@@ -199,7 +201,7 @@ namespace BubbleSpinner.Core
                 ProcessPreJumpMessages();
                 return;
             }
-            
+
             state.isInPauseState = false;
             state.resumeTarget   = ResumeTarget.None;
 
@@ -337,10 +339,11 @@ namespace BubbleSpinner.Core
             DetermineNextAction();
         }
 
-        public void AdvanceToNextChapter()
-        {
-            BSDebug.Warn("[DialogueExecutor] AdvanceToNextChapter() called — use <<jump ChapterId>> in your .bub file instead.");
-        }
+        // DEAD CODE — only reachable via OnContinueToNextChapterClicked, which requires
+        // public void AdvanceToNextChapter()
+        // {
+        //     BSDebug.Warn("[DialogueExecutor] AdvanceToNextChapter() called — use <<jump ChapterId>> in your .bub file instead.");
+        // }
 
         // ═══════════════════════════════════════════════════════════
         // CORE PROCESSING LOGIC
@@ -760,21 +763,22 @@ namespace BubbleSpinner.Core
             }
         }
 
-        private string DescribeChoiceBlocks()
-        {
-            if (currentNode == null || currentNode.choiceBlocks == null || currentNode.choiceBlocks.Count == 0)
-                return "<none>";
+        // DEAD CODE — private debug helper, never called within DialogueExecutor
+        // private string DescribeChoiceBlocks()
+        // {
+        //     if (currentNode == null || currentNode.choiceBlocks == null || currentNode.choiceBlocks.Count == 0)
+        //         return "<none>";
 
-            var describedBlocks = new List<string>();
-            foreach (var block in currentNode.choiceBlocks)
-            {
-                string blockId = string.IsNullOrEmpty(block.blockId) ? "<no-id>" : block.blockId;
-                string stateLabel = IsChoiceBlockResolved(block) ? "resolved" : "pending";
-                describedBlocks.Add($"{blockId}@{block.pauseIndex}:{stateLabel}");
-            }
+        //     var describedBlocks = new List<string>();
+        //     foreach (var block in currentNode.choiceBlocks)
+        //     {
+        //         string blockId = string.IsNullOrEmpty(block.blockId) ? "<no-id>" : block.blockId;
+        //         string stateLabel = IsChoiceBlockResolved(block) ? "resolved" : "pending";
+        //         describedBlocks.Add($"{blockId}@{block.pauseIndex}:{stateLabel}");
+        //     }
 
-            return string.Join(", ", describedBlocks);
-        }
+        //     return string.Join(", ", describedBlocks);
+        // }
 
         private string GetFirstNodeName()
         {

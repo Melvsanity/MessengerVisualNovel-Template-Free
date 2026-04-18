@@ -478,7 +478,7 @@ namespace ChatSim.UI.ChatApp.Controllers
         }
         
         /// <summary>
-        /// Proper end button handling with chapter detection
+        /// Called when the conversation has no more nodes to execute.
         /// </summary>
         private void HandleConversationEnd()
         {
@@ -486,17 +486,7 @@ namespace ChatSim.UI.ChatApp.Controllers
 
             GameBootstrap.Conversation.SaveCurrentConversation();
             choiceDisplay.ClearChoices();
-
-            if (currentExecutor.HasMoreChapters)
-            {
-                _log.Info("More chapters available - showing continue to next chapter button");
-                choiceDisplay.ShowEndButton("Continue to Next Chapter", OnContinueToNextChapterClicked);
-            }
-            else
-            {
-                _log.Info("No more chapters - showing return button");
-                choiceDisplay.ShowEndButton("Return to Contacts", OnReturnToContactsClicked);
-            }
+            choiceDisplay.ShowEndButton("Return to Contacts", OnReturnToContactsClicked);
         }
         
         private void HandleChapterChange(string chapterName)
@@ -511,22 +501,25 @@ namespace ChatSim.UI.ChatApp.Controllers
         // ░ CHAPTER NAVIGATION
         // ═══════════════════════════════════════════════════════════
 
+        // DEAD CODE — no caller found in provided scripts; original implementation used a "Continue to Next Chapter" button that was removed in favor of <<jump>> tags in .bub files
         /// <summary>
         /// Handle "Continue to Next Chapter" button click - advances to next chapter in current conversation
         /// </summary>
-        private void OnContinueToNextChapterClicked()
-        {
-            _log.Info("Continue to next chapter clicked");
+        // private void OnContinueToNextChapterClicked()
+        // {
+        //     _log.Info("Continue to next chapter clicked");
 
-            if (currentExecutor == null)
-            {
-                _log.Error("Cannot advance chapter - no active executor");
-                return;
-            }
+        //     if (currentExecutor == null)
+        //     {
+        //         _log.Error("Cannot advance chapter - no active executor");
+        //         return;
+        //     }
 
-            choiceDisplay.ClearChoices();
-            currentExecutor.AdvanceToNextChapter();
-        }
+        //     choiceDisplay.ClearChoices();
+
+        //     // DEAD CODE — AdvanceToNextChapter() removed; HasMoreChapters is always false so this is never reached
+        //     // currentExecutor.AdvanceToNextChapter();
+        // }
         
         /// <summary>
         /// Handle "Return to Contacts" button click
